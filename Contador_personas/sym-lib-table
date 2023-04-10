@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name receptor_usb-rescue)(type Legacy)(uri D:/Usuarios/pipiuy/Dropbox/empresa4/base/receptor_usb/receptor_usb-rescue.lib)(options "")(descr ""))
+  (lib (name Contador_personas-rescue)(type Legacy)(uri ${KIPRJMOD}/Contador_personas-rescue.lib)(options "")(descr ""))
+)

@@ -40,7 +40,7 @@ volatile int IntCount;
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define window 20
+#define window 15
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -53,7 +53,6 @@ volatile int IntCount;
 I2C_HandleTypeDef hi2c1;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
-UART_HandleTypeDef huart6;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -62,7 +61,7 @@ static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
-static void MX_USART6_UART_Init(void);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -116,8 +115,8 @@ int main(void)
   MX_I2C1_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
-  MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
   HAL_GPIO_WritePin(GPIOA, RE_Pin, 1);
   HAL_GPIO_WritePin(GPIOA, DE_Pin, 1);
   HAL_GPIO_WritePin(GPIOB, XSDN_Pin, 1);
@@ -194,7 +193,6 @@ int main(void)
 
 			// inject the new ranged distance in the people counting algorithm
 			/*PplCounter = ProcessPeopleCountingData(Distance, Zone);
-
 			Zone++;
 			Zone = Zone%2;*/
 
@@ -222,6 +220,11 @@ int main(void)
 					avg_Distance += measurements[i];
 				}
 				avg_Distance = avg_Distance / window;
+				if(avg_Distance>120){
+					HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
+				}else{
+					HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
+				}
 				sprintf(buf,"%d\r\n", avg_Distance);
 				HAL_UART_Transmit(&huart1, buf, strlen((char*)buf), HAL_MAX_DELAY);
 				HAL_GPIO_TogglePin(GPIOB, LED_1_DO_Pin);
@@ -381,33 +384,7 @@ static void MX_USART2_UART_Init(void)
   * @param None
   * @retval None
   */
-static void MX_USART6_UART_Init(void)
-{
 
-  /* USER CODE BEGIN USART6_Init 0 */
-
-  /* USER CODE END USART6_Init 0 */
-
-  /* USER CODE BEGIN USART6_Init 1 */
-
-  /* USER CODE END USART6_Init 1 */
-  huart6.Instance = USART6;
-  huart6.Init.BaudRate = 115200;
-  huart6.Init.WordLength = UART_WORDLENGTH_8B;
-  huart6.Init.StopBits = UART_STOPBITS_1;
-  huart6.Init.Parity = UART_PARITY_NONE;
-  huart6.Init.Mode = UART_MODE_TX_RX;
-  huart6.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart6.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart6) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART6_Init 2 */
-
-  /* USER CODE END USART6_Init 2 */
-
-}
 
 /**
   * @brief GPIO Initialization Function
@@ -450,7 +427,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : RST_Pin CHPD_Pin */
-  GPIO_InitStruct.Pin = RST_Pin|CHPD_Pin;
+  GPIO_InitStruct.Pin = GPIO_PIN_7|RST_Pin|CHPD_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

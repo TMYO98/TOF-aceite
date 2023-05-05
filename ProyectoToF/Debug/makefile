@@ -61,8 +61,8 @@ all:
 main-build: ProyectoToF.elf secondary-outputs
 
 # Tool invocations
-ProyectoToF.elf ProyectoToF.map: $(OBJS) $(USER_OBJS) D:\Documentos\Workspaces\ST_WORKSPACE\ProyectoToF\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "ProyectoToF.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\Documentos\Workspaces\ST_WORKSPACE\ProyectoToF\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ProyectoToF.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+ProyectoToF.elf ProyectoToF.map: $(OBJS) $(USER_OBJS) D:\Me\Trabajo\ 2023\NB\Josafat\ToF_Aceite\ProyectoToF\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "ProyectoToF.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\Me\Trabajo 2023\NB\Josafat\ToF_Aceite\ProyectoToF\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ProyectoToF.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
